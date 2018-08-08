@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-slim
+FROM sonatype.nexus:10399/openjdk:8-jre-slim
 
 ARG webgoat_version=8.0.0.M3
 
