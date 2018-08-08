@@ -57,7 +57,7 @@ pipeline {
           steps {
             //input 'Scan with IQ at Stage-Release?'
 
-            sh 'docker save -o $WORKSPACE/webgoat.tar webgoat/webgoat-8.0-${BUILD_ID}'
+            sh 'docker save -o "$WORKSPACE/webgoat.tar" webgoat/webgoat-8.0-${BUILD_ID}'
             nexusPolicyEvaluation(iqStage: 'stage-release', iqApplication: 'webgoat8')
           }
         }
