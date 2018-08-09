@@ -79,13 +79,11 @@ pipeline {
 
         createTag nexusInstanceId: 'Nxr3', tagName: "DockerStagingDemoJenkinsfile-Webgoat8-${env.BUILD_ID}"
 
-        associateTag nexusInstanceId: 'Nxr3', search: [[key: 'version', value: '${env.BUILD_ID}']], tagName: 'DockerStagingDemoJenkinsfile-Webgoat8-${env.BUILD_ID}'
-        
+        associateTag nexusInstanceId: 'Nxr3', search: [[key: 'repository', value: 'DockerDevelopment'], [key: 'name', value: "webgoat/webgoat-8.0-${env.BUILD_ID}"], [key: 'version', value: "8.0-${env.BUILD_ID}"]], tagName: "DockerStagingDemoJenkinsfile-Webgoat8-${env.BUILD_ID}"
+
         input 'Move Image out of Beta?'
 
         moveComponents destination: 'DockerApproved', nexusInstanceId: 'Nxr3', tagName: "DockerStagingDemoJenkinsfile-Webgoat8-${env.BUILD_ID}"
-
-
 
       }
     }
