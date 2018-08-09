@@ -1,13 +1,6 @@
 pipeline {
   agent any
   stages {
-    // Mark the code checkout 'stage'....
-    stage ('Checkout') {
-        steps {
-        // Get some code from a GitHub repository
-        git branch: 'develop',  credentialsId: '5701f04f-1729-4bb8-81cd-b6971fbe6452', url: 'git@github.com:bfd1964/WebGoat.git'
-        }
-    }
     stage('Build') {
       steps {
         echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
