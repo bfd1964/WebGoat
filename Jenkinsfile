@@ -6,15 +6,15 @@ pipeline {
         echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
 
         //input 'Build with maven?'
-
+        withMaven(jdk: 'JDK1.8.0_91', maven: 'Maven 3.3.9', mavenSettingsConfig: '3d93ab17-fa73-416e-abc1-d56831f88d4c') {
         sh '''
                     env
                     echo "PATH = ${PATH}"
-                    echo "M2_HOME = ${M2_HOME}"
                     echo "Build Number = ${BUILD_ID}"
                     mvn -B clean install -Dmaven.test.skip=true
                 '''
         //input 'Continue?'
+        }
       }
     }
     stage('Scan App - Build Container') {
@@ -71,8 +71,8 @@ pipeline {
         //input 'Push to Nexus Repo?'
 
         sh '''
-                    docker tag webgoat/webgoat-8.0-${BUILD_ID} local-mike:19447/webgoat/webgoat-8.0-${BUILD_ID}:8.0-${BUILD_ID}
-                    docker push local-mike:19447/webgoat/webgoat-8.0-${BUILD_ID}
+                    docker tag webgoat/webgoat-8.0-${BUILD_ID} sonatype.nexus:10351/webgoat/webgoat-8.0-${BUILD_ID}:8.0-${BUILD_ID}
+                    docker push sonatype.nexus:10351/webgoat/webgoat-8.0-${BUILD_ID}
                 '''
       }
     }
@@ -97,6 +97,6 @@ pipeline {
     }
   }
   tools {
-    maven 'Maven 3.5.3 - Local Install'
+    maven 'Maven 3.3.9'
   }
 }
