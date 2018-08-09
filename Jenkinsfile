@@ -1,6 +1,13 @@
 pipeline {
   agent any
   stages {
+    // Mark the code checkout 'stage'....
+    stage ('Checkout') {
+        steps {
+        // Get some code from a GitHub repository
+        git branch: 'develop',  credentialsId: '5701f04f-1729-4bb8-81cd-b6971fbe6452', url: 'git@github.com:bfd1964/WebGoat.git'
+        }
+    }
     stage('Build') {
       steps {
         echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
@@ -64,9 +71,6 @@ pipeline {
       }
     }
     stage('Publish Container') {
-      when {
-        branch 'develop'
-      }
       steps {
         //input 'Push to Nexus Repo?'
 
@@ -77,19 +81,16 @@ pipeline {
       }
     }
     stage('Create Tag') {
-      when {
-        branch 'develop'
-      }
       steps {
         //input 'Create tag in Nexus Repo?'
 
-        createTag nexusInstanceId: 'nexus3-demo', tagName: "DockerStagingDemoJenkinsfile-Webgoat8-${env.BUILD_ID}"
+        createTag nexusInstanceId: 'Nxr3', tagName: "DockerStagingDemoJenkinsfile-Webgoat8-${env.BUILD_ID}"
 
-        associateTag nexusInstanceId: 'nexus3-demo', search: [[key: 'repository', value: 'docker-hosted-beta'], [key: 'name', value: "webgoat/webgoat-8.0-${env.BUILD_ID}"], [key: 'version', value: "8.0-${env.BUILD_ID}"]], tagName: "DockerStagingDemoJenkinsfile-Webgoat8-${env.BUILD_ID}"
-
+        associateTag nexusInstanceId: 'Nxr3', search: [[key: 'version', value: '${env.BUILD_ID}']], tagName: 'DockerStagingDemoJenkinsfile-Webgoat8-${env.BUILD_ID}'
+        
         input 'Move Image out of Beta?'
 
-        moveComponents destination: 'docker-hosted', nexusInstanceId: 'nexus3-demo', tagName: "DockerStagingDemoJenkinsfile-Webgoat8-${env.BUILD_ID}"
+        moveComponents destination: 'DockerApproved', nexusInstanceId: 'Nxr3', tagName: "DockerStagingDemoJenkinsfile-Webgoat8-${env.BUILD_ID}"
 
 
 
